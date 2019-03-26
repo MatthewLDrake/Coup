@@ -1,0 +1,12 @@
+c:\users\matthew\source\repos\Coup\Coup\bin\Debug\Coup.exe.config
+c:\users\matthew\source\repos\Coup\Coup\bin\Debug\Coup.exe
+c:\users\matthew\source\repos\Coup\Coup\bin\Debug\Coup.pdb
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.csprojResolveAssemblyReference.cache
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.Player.resources
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.Properties.Resources.resources
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.csproj.GenerateResource.Cache
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.csproj.CoreCompileInputs.cache
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.exe
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.pdb
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.MainGame.resources
+c:\users\matthew\source\repos\Coup\Coup\obj\Debug\Coup.PlayerIcon.resources
