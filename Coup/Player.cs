@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,16 +17,37 @@ namespace Coup
         private int coins, playerNum;
         private bool currentTurn;
         private MainGame game;
-        public Player(int playerNum, MainGame game)
+        private string playerName;
+        private PlayerGameView view;
+        private int deadCards;
+
+        private string selectedButton;
+        public Player(int playerNum, MainGame game, string playerName)
         {
             InitializeComponent();
+            this.playerName = playerName;
             coins = 2;
             coinLabel.Text = "Coins: " + coins;
             currentTurn = false;
             this.playerNum = playerNum;
             this.game = game;
             tableLayoutPanel1.Visible = currentTurn;
-            Text = "Player " + playerNum;
+            Text = playerName;
+            
+            deadCards = 0;
+        }
+        public void SetUpGameView()
+        {
+            view = new PlayerGameView(playerNum, game);
+            view.Show();
+        }
+        public bool Eliminated()
+        {
+            return deadCards >= 2;
+        }
+        public string GetName()
+        {
+            return playerName;
         }
         public void IsCurrentTurn()
         {
@@ -52,16 +74,16 @@ namespace Coup
         }
         private void UpdateCards()
         {
-            pictureBox1.Image = cardOne.GetImage();
-            pictureBox2.Image = cardTwo.GetImage();
+            pictureBox1.Image = cardOne.GetImage(true);
+            pictureBox2.Image = cardTwo.GetImage(true);
         }
-        public Bitmap GetImageOne()
+        public Bitmap GetImageOne(bool isAdmin = false)
         {
-            return cardOne.GetImage();
+            return cardOne.GetImage(isAdmin);
         }
-        public Bitmap GetImageTwo()
+        public Bitmap GetImageTwo(bool isAdmin = false)
         {
-            return cardTwo.GetImage();
+            return cardTwo.GetImage(isAdmin);
         }
         public int GetCoins()
         {
@@ -80,33 +102,122 @@ namespace Coup
             coins += newCoins;
             coinLabel.Text = "Coins: " + coins;
         }
-        public void ActionTaken(String action, int player, String playerName)
+        public void KillCard()
+        {
+            if(deadCards == 1)
+            {
+                DialogResult result = MessageBox.Show("You've been eliminated", "Elimination", MessageBoxButtons.OK);
+                if (cardOne.IsDead()) cardTwo.Kill();
+                else cardOne.Kill();
+            }
+            else
+            {
+                KillCard kill = new KillCard(cardOne, cardTwo);
+                kill.ShowDialog();
+            }
+            deadCards++;
+        }
+        public List<Card> AmbassadorAction(Card firstAlt, Card secondAlt)
+        {
+            AmbassadorAction action = new AmbassadorAction(cardOne, cardTwo, firstAlt, secondAlt);
+            action.ShowDialog();
+            List<Card> selected = action.GetSelected();
+            cardOne = selected[0];
+            cardTwo = selected[1];
+            UpdateCards();
+            return action.GetNotSelected();
+        }
+
+        public void ActionTaken(String action, int player, String playerName, String targetName)
         {
             switch(action)
             {
                 case "ambassadorButton":
+                    DialogResult result = MessageBox.Show(playerName + " used an ambassador card. Would you like to challenge the ambassador action?", "Ambassador Used", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.No)
+                        game.NoActionTaken();
+                    else
+                        game.Challenge(this);
                     break;
                 case "assasainButton":
+                    if (player == playerNum)
+                    {
+                        AssasainDialog dialog = new AssasainDialog(playerName);
+                        result = dialog.ShowDialog();
+                        if(result == DialogResult.None)
+                        {
+                            game.NoActionTaken();
+                        }
+                        else if(result == DialogResult.Abort)
+                        {
+                            game.Block(playerNum);
+                        }
+                        else
+                        {
+                            game.Challenge(this);
+                        }
+                    }
+                    else
+                    {
+                        result = MessageBox.Show(playerName + " used an assasain card on " + targetName + ". Would you like to challenge the assasain action?", "Assasain Used", MessageBoxButtons.YesNo);
+                        if (result == DialogResult.No)
+                            game.NoActionTaken();
+                        else
+                            // TODO:
+                            game.Challenge(this);
+                    }
                     break;
                 case "captainButton":
+                    if (player == playerNum)
+                    {
+                        CaptainDialog dialog = new CaptainDialog(playerName);
+                        result = dialog.ShowDialog();
+                        if (result == DialogResult.None)
+                        {
+                            game.NoActionTaken();
+                        }
+                        else if (result == DialogResult.Abort)
+                        {
+                            game.Block(playerNum);
+                        }
+                        else
+                        {
+                            game.Challenge(this);
+                        }
+                    }
+                    else
+                    {
+                        result = MessageBox.Show(playerName + " used a captain card on " + targetName + ". Would you like to challenge the captain action?", "Captain Used", MessageBoxButtons.YesNo);
+                        if (result == DialogResult.No)
+                            game.NoActionTaken();
+                        else
+                            game.Challenge(this);
+                    }
                     break;
                 case "coupButton":
+                    if(player == playerNum)
+                    {
+                        KillCard();
+                    }
+                    else
+                    {
+                        MessageBox.Show(playerName + " performed a coup on " + targetName, "Coup Occurred", MessageBoxButtons.OK);                        
+                    }
+                    game.NoActionTaken();
                     break;
                 case "dukeButton":
-                    DialogResult result = MessageBox.Show(playerName + " took duke money. Would you like to challenge the duke action?", "Income Button Pressed", MessageBoxButtons.YesNo);
+                    result = MessageBox.Show(playerName + " took duke money. Would you like to challenge the duke action?", "Duke Used", MessageBoxButtons.YesNo);
                     if (result == DialogResult.No)
                         game.NoActionTaken();
                     else
-                        // TODO:
-                        game.NoActionTaken();
+                        game.Challenge(this);
                     break;
                 case "foreignAidButton":
-                    DialogResult result = MessageBox.Show(playerName + " took foreign aid. Would you like to block with a duke?", "Income Button Pressed", MessageBoxButtons.YesNo);
+                    result = MessageBox.Show(playerName + " took foreign aid. Would you like to block with a duke?", "Foreign Aid Pressed", MessageBoxButtons.YesNo);
                     if (result == DialogResult.No)
                         game.NoActionTaken();
                     else
-                        // TODO:
-                        game.NoActionTaken();
+                        game.Block(playerNum);
 
                     
                     break;
@@ -116,6 +227,34 @@ namespace Coup
                     break;
             }
         }
+        public void PlayerSelected(int player)
+        {
+            game.ButtonClicked(selectedButton, player);
+            
+        }
+        private void targettedPlayerClick(object sender, EventArgs e)
+        {            
+            view.ShowButtons();
+            currentTurn = false;
+            tableLayoutPanel1.Visible = currentTurn;
 
+            selectedButton = ((Button)sender).Name;
+        }
+        public void UpdateView()
+        {
+            view.UpdateView();
+        }
+        public void AlreadyChallenged(String playerName)
+        {
+            MessageBox.Show(playerName + " was already challenged.", "Already Challenged", MessageBoxButtons.OK);
+        }
+        public bool Challenge(string buttonName, string playerName)
+        {
+            Challenge challenge = new Challenge(buttonName, playerName, cardOne, cardTwo);
+            challenge.ShowDialog();
+
+
+            return challenge.Result();
+        }
     }
 }

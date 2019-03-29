@@ -62,6 +62,7 @@
             this.playerOneImageTwo.Location = new System.Drawing.Point(121, 35);
             this.playerOneImageTwo.Name = "playerOneImageTwo";
             this.playerOneImageTwo.Size = new System.Drawing.Size(113, 122);
+            this.playerOneImageTwo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.playerOneImageTwo.TabIndex = 3;
             this.playerOneImageTwo.TabStop = false;
             // 
@@ -82,6 +83,7 @@
             this.playerOneImageOne.Location = new System.Drawing.Point(3, 35);
             this.playerOneImageOne.Name = "playerOneImageOne";
             this.playerOneImageOne.Size = new System.Drawing.Size(112, 122);
+            this.playerOneImageOne.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.playerOneImageOne.TabIndex = 2;
             this.playerOneImageOne.TabStop = false;
             // 

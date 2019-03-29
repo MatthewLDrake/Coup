@@ -13,12 +13,13 @@ namespace Coup
     public partial class MainGame : Form
     {
         private static List<Card> cards;
-        private static List<Player> players;
+        public static List<Player> players;
         private static List<PlayerIcon> icons;
         public static Random rng = new Random();
         private Semaphore challengeSem;
         private int currentTurn = 0;
-        private bool wasChallenged;
+        private bool wasChallenged, wasBlocked;
+        private Player challengingPlayer;
         public MainGame()
         {
             InitializeComponent();
@@ -58,11 +59,16 @@ namespace Coup
             };
 
             cards = Shuffle(cards);
+            players.Add(new Player(0, this, "Player 1"));
+            players.Add(new Player(1, this, "Player 2"));
+            players.Add(new Player(2, this, "Player 3"));
+            players.Add(new Player(3, this, "Player 4"));
+            players.Add(new Player(4, this, "Player 5"));
+            players.Add(new Player(5, this, "Player 6"));
 
             for(int i =0; i < 6; i++)
             {
-                Player temp = new Player(i, this);
-                players.Add(temp);
+                Player temp = players[i];
                 List<Card> firstTwoCards = new List<Card>
                 {
                     cards[0],
@@ -74,14 +80,20 @@ namespace Coup
                 temp.Show();
 
                 icons[i].SetPlayerNum(i + 1);
-                icons[i].SetImageOne(temp.GetImageOne());
-                icons[i].SetImageTwo(temp.GetImageTwo());
+                icons[i].SetImageOne(temp.GetImageOne(true));
+                icons[i].SetImageTwo(temp.GetImageTwo(true));
                 icons[i].SetMoney(temp.GetCoins());
                 if (i == currentTurn) temp.IsCurrentTurn();
             }
-            pictureBox1.Image = cards[0].GetImage();
-            pictureBox2.Image = cards[1].GetImage();
-            pictureBox3.Image = cards[2].GetImage();
+            foreach (Player p in players)
+                p.SetUpGameView();
+            UpdateCards();
+        }
+        private void UpdateCards()
+        {
+            pictureBox1.Image = cards[0].GetImage(true);
+            pictureBox2.Image = cards[1].GetImage(true);
+            pictureBox3.Image = cards[2].GetImage(true);
         }
         public void ButtonClicked(String buttonName, int player = -1)
         {
@@ -89,7 +101,7 @@ namespace Coup
             for(int i = 0; i < players.Count; i++)
             {
                 if (i == currentTurn) continue;
-                players[i].ActionTaken(buttonName, player);
+                players[i].ActionTaken(buttonName, player,players[currentTurn].GetName(), player == -1 ? "" : players[player].GetName());
             }
             challengeSem.WaitOne();
             challengeSem.WaitOne();
@@ -98,45 +110,87 @@ namespace Coup
             challengeSem.WaitOne();
 
 
-            Console.WriteLine("Shouldn't happen until all players respond");
+            Console.WriteLine("All players have responded");
 
 
 
-            
-            if(wasChallenged)
+            if(wasBlocked)
             {
-
+                for (int i = 0; i < players.Count; i++)
+                {
+                    if (i == currentTurn) continue;
+                    players[i].ActionBlocked(buttonName, player, players[currentTurn].GetName(), player == -1 ? "" : players[player].GetName());
+                }
+            }
+            else if(wasChallenged)
+            {
+                bool challengeResult = players[currentTurn].Challenge(buttonName, challengingPlayer.GetName());
+                if(challengeResult)
+                {
+                    // Challenge not successful, challenging player loses a card
+                    challengingPlayer.KillCard();
+                    DoAction(buttonName, currentTurn, player);
+                }
+                else
+                {
+                    // Tell all players challenge was successful
+                }
             }
             else
             {
-                switch (buttonName)
-                {
-                    case "ambassadorButton":
-                        break;
-                    case "assasainButton":
-                        break;
-                    case "captainButton":
-                        players[currentTurn].ChangeCoins(2);
-                        players[player].ChangeCoins(-2);
-                        break;
-                    case "coupButton":
-                        break;
-                    case "dukeButton":
-                        players[currentTurn].ChangeCoins(3);
-                        break;
-                    case "foreignAidButton":
-                        players[currentTurn].ChangeCoins(2);
-                        break;
-                    case "incomeButton":
-                        players[currentTurn].ChangeCoins(1);
-                        break;
-                }
+                DoAction(buttonName, currentTurn, player);
+                
             }
 
             currentTurn = (currentTurn + 1) % players.Count;
-
+            wasChallenged = false;
             players[currentTurn].IsCurrentTurn();
 
+            foreach(Player p in players)
+            {
+                p.UpdateView();
+            }
+
+        }
+        private void DoAction(string buttonName, int currentTurn, int player)
+        {
+            switch (buttonName)
+            {
+                case "ambassadorButton":
+                    cards = Shuffle(cards);
+                    List<Card> temp = players[currentTurn].AmbassadorAction(cards[0], cards[1]);
+                    cards.RemoveAt(0);
+                    cards.RemoveAt(0);
+                    cards.AddRange(temp);
+                    icons[currentTurn].SetImageOne(players[currentTurn].GetImageOne(true));
+                    icons[currentTurn].SetImageTwo(players[currentTurn].GetImageTwo(true));
+                    UpdateCards();
+                    break;
+                case "assasainButton":
+                    players[player].KillCard();
+                    break;
+                case "captainButton":
+                    players[currentTurn].ChangeCoins(2);
+                    players[player].ChangeCoins(-2);
+                    icons[currentTurn].SetMoney(players[currentTurn].GetCoins());
+                    icons[player].SetMoney(players[player].GetCoins());
+                    break;
+                case "coupButton":
+                    // already taken care of in action taken, nothing to do
+                    break;
+                case "dukeButton":
+                    players[currentTurn].ChangeCoins(3);
+                    icons[currentTurn].SetMoney(players[currentTurn].GetCoins());
+                    break;
+                case "foreignAidButton":
+                    players[currentTurn].ChangeCoins(2);
+                    icons[currentTurn].SetMoney(players[currentTurn].GetCoins());
+                    break;
+                case "incomeButton":
+                    players[currentTurn].ChangeCoins(1);
+                    icons[currentTurn].SetMoney(players[currentTurn].GetCoins());
+                    break;
+            }
         }
         public void NoActionTaken()
         {
@@ -155,6 +209,19 @@ namespace Coup
                 list[n] = value;
             }
             return list;
+        }
+        
+        public void Challenge(Player p)
+        {
+            if (wasChallenged) p.AlreadyChallenged(players[currentTurn].GetName());
+            else challengingPlayer = p;
+            wasChallenged = true;
+            challengeSem.Release();
+        }
+        public void Block(int playerNum)
+        {
+            wasBlocked = true;
+            challengeSem.Release();
         }
     }
 }

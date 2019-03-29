@@ -32,20 +32,20 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.coinLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dukeButton = new System.Windows.Forms.Button();
+            this.captainButton = new System.Windows.Forms.Button();
+            this.ambassadorButton = new System.Windows.Forms.Button();
+            this.assasainButton = new System.Windows.Forms.Button();
+            this.coupButton = new System.Windows.Forms.Button();
             this.incomeButton = new System.Windows.Forms.Button();
             this.foreignAidButton = new System.Windows.Forms.Button();
-            this.coupButton = new System.Windows.Forms.Button();
-            this.assasainButton = new System.Windows.Forms.Button();
-            this.ambassadorButton = new System.Windows.Forms.Button();
-            this.captainButton = new System.Windows.Forms.Button();
-            this.dukeButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -108,12 +108,127 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(388, 210);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
+            // label7
+            // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(94, 188);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(121, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Use Duke (Three Coins)";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(46, 158);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(217, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Use Captain (Take 2 coins from other player)";
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(9, 128);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(292, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Use Ambassador (Take two cards from deck and select two)";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(83, 98);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(144, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Use Assasain (Costs 3 Coins)";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(87, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(136, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Stage Coup (Costs 7 Coins)";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(81, 38);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(147, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Take Foreign Aid (Two Coins)";
+            // 
+            // dukeButton
+            // 
+            this.dukeButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dukeButton.Location = new System.Drawing.Point(313, 183);
+            this.dukeButton.Name = "dukeButton";
+            this.dukeButton.Size = new System.Drawing.Size(72, 24);
+            this.dukeButton.TabIndex = 4;
+            this.dukeButton.Text = "Do Action";
+            this.dukeButton.UseVisualStyleBackColor = true;
+            this.dukeButton.Click += new System.EventHandler(this.ButtonClick);
+            // 
+            // captainButton
+            // 
+            this.captainButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.captainButton.Location = new System.Drawing.Point(313, 153);
+            this.captainButton.Name = "captainButton";
+            this.captainButton.Size = new System.Drawing.Size(72, 24);
+            this.captainButton.TabIndex = 4;
+            this.captainButton.Text = "Do Action";
+            this.captainButton.UseVisualStyleBackColor = true;
+            this.captainButton.Click += new System.EventHandler(this.targettedPlayerClick);
+            // 
+            // ambassadorButton
+            // 
+            this.ambassadorButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ambassadorButton.Location = new System.Drawing.Point(313, 123);
+            this.ambassadorButton.Name = "ambassadorButton";
+            this.ambassadorButton.Size = new System.Drawing.Size(72, 24);
+            this.ambassadorButton.TabIndex = 4;
+            this.ambassadorButton.Text = "Do Action";
+            this.ambassadorButton.UseVisualStyleBackColor = true;
+            this.ambassadorButton.Click += new System.EventHandler(this.ButtonClick);
+            // 
+            // assasainButton
+            // 
+            this.assasainButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.assasainButton.Location = new System.Drawing.Point(313, 93);
+            this.assasainButton.Name = "assasainButton";
+            this.assasainButton.Size = new System.Drawing.Size(72, 24);
+            this.assasainButton.TabIndex = 4;
+            this.assasainButton.Text = "Do Action";
+            this.assasainButton.UseVisualStyleBackColor = true;
+            this.assasainButton.Click += new System.EventHandler(this.targettedPlayerClick);
+            // 
+            // coupButton
+            // 
+            this.coupButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.coupButton.Location = new System.Drawing.Point(313, 63);
+            this.coupButton.Name = "coupButton";
+            this.coupButton.Size = new System.Drawing.Size(72, 24);
+            this.coupButton.TabIndex = 4;
+            this.coupButton.Text = "Do Action";
+            this.coupButton.UseVisualStyleBackColor = true;
+            this.coupButton.Click += new System.EventHandler(this.targettedPlayerClick);
+            // 
             // incomeButton
             // 
             this.incomeButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.incomeButton.Location = new System.Drawing.Point(313, 3);
             this.incomeButton.Name = "incomeButton";
-            this.incomeButton.Size = new System.Drawing.Size(72, 23);
+            this.incomeButton.Size = new System.Drawing.Size(72, 24);
             this.incomeButton.TabIndex = 0;
             this.incomeButton.Text = "Do Action";
             this.incomeButton.UseVisualStyleBackColor = true;
@@ -122,62 +237,13 @@
             // foreignAidButton
             // 
             this.foreignAidButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.foreignAidButton.Location = new System.Drawing.Point(313, 32);
+            this.foreignAidButton.Location = new System.Drawing.Point(313, 33);
             this.foreignAidButton.Name = "foreignAidButton";
             this.foreignAidButton.Size = new System.Drawing.Size(72, 24);
             this.foreignAidButton.TabIndex = 1;
             this.foreignAidButton.Text = "Do Action";
             this.foreignAidButton.UseVisualStyleBackColor = true;
-            // 
-            // coupButton
-            // 
-            this.coupButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.coupButton.Location = new System.Drawing.Point(313, 62);
-            this.coupButton.Name = "coupButton";
-            this.coupButton.Size = new System.Drawing.Size(72, 24);
-            this.coupButton.TabIndex = 4;
-            this.coupButton.Text = "Do Action";
-            this.coupButton.UseVisualStyleBackColor = true;
-            // 
-            // assasainButton
-            // 
-            this.assasainButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.assasainButton.Location = new System.Drawing.Point(313, 92);
-            this.assasainButton.Name = "assasainButton";
-            this.assasainButton.Size = new System.Drawing.Size(72, 24);
-            this.assasainButton.TabIndex = 4;
-            this.assasainButton.Text = "Do Action";
-            this.assasainButton.UseVisualStyleBackColor = true;
-            // 
-            // ambassadorButton
-            // 
-            this.ambassadorButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ambassadorButton.Location = new System.Drawing.Point(313, 122);
-            this.ambassadorButton.Name = "ambassadorButton";
-            this.ambassadorButton.Size = new System.Drawing.Size(72, 24);
-            this.ambassadorButton.TabIndex = 4;
-            this.ambassadorButton.Text = "Do Action";
-            this.ambassadorButton.UseVisualStyleBackColor = true;
-            // 
-            // captainButton
-            // 
-            this.captainButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.captainButton.Location = new System.Drawing.Point(313, 152);
-            this.captainButton.Name = "captainButton";
-            this.captainButton.Size = new System.Drawing.Size(72, 24);
-            this.captainButton.TabIndex = 4;
-            this.captainButton.Text = "Do Action";
-            this.captainButton.UseVisualStyleBackColor = true;
-            // 
-            // dukeButton
-            // 
-            this.dukeButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dukeButton.Location = new System.Drawing.Point(313, 182);
-            this.dukeButton.Name = "dukeButton";
-            this.dukeButton.Size = new System.Drawing.Size(72, 25);
-            this.dukeButton.TabIndex = 4;
-            this.dukeButton.Text = "Do Action";
-            this.dukeButton.UseVisualStyleBackColor = true;
+            this.foreignAidButton.Click += new System.EventHandler(this.ButtonClick);
             // 
             // label2
             // 
@@ -188,66 +254,6 @@
             this.label2.Size = new System.Drawing.Size(123, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Take Income (One Coin)";
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(81, 37);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(147, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Take Foreign Aid (Two Coins)";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(87, 67);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(136, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Stage Coup (Costs 7 Coins)";
-            // 
-            // label4
-            // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(83, 97);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(144, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Use Assasain (Costs 3 Coins)";
-            // 
-            // label5
-            // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 127);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(292, 13);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Use Ambassador (Take two cards from deck and select two)";
-            // 
-            // label6
-            // 
-            this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(46, 157);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(217, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Use Captain (Take 2 coins from other player)";
-            // 
-            // label7
-            // 
-            this.label7.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(94, 188);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(121, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "Use Duke (Three Coins)";
             // 
             // Player
             // 

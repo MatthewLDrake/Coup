@@ -8,9 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Coup</RootNamespace>
     <AssemblyName>Coup</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,12 +46,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmbassadorAction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AmbassadorAction.Designer.cs">
+      <DependentUpon>AmbassadorAction.cs</DependentUpon>
+    </Compile>
     <Compile Include="AmbassadorCard.cs" />
     <Compile Include="AssasainCard.cs" />
+    <Compile Include="AssasainDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssasainDialog.Designer.cs">
+      <DependentUpon>AssasainDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="CaptainCard.cs" />
+    <Compile Include="CaptainDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaptainDialog.Designer.cs">
+      <DependentUpon>CaptainDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Card.cs" />
+    <Compile Include="Challenge.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Challenge.Designer.cs">
+      <DependentUpon>Challenge.cs</DependentUpon>
+    </Compile>
     <Compile Include="ContessaCard.cs" />
     <Compile Include="DukeCard.cs" />
+    <Compile Include="KillCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KillCard.Designer.cs">
+      <DependentUpon>KillCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainGame.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +94,12 @@
     <Compile Include="Player.Designer.cs">
       <DependentUpon>Player.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayerGameView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlayerGameView.Designer.cs">
+      <DependentUpon>PlayerGameView.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlayerIcon.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -71,11 +108,29 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AmbassadorAction.resx">
+      <DependentUpon>AmbassadorAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AssasainDialog.resx">
+      <DependentUpon>AssasainDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CaptainDialog.resx">
+      <DependentUpon>CaptainDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Challenge.resx">
+      <DependentUpon>Challenge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KillCard.resx">
+      <DependentUpon>KillCard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainGame.resx">
       <DependentUpon>MainGame.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Player.resx">
       <DependentUpon>Player.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayerGameView.resx">
+      <DependentUpon>PlayerGameView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlayerIcon.resx">
       <DependentUpon>PlayerIcon.cs</DependentUpon>
@@ -88,6 +143,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
