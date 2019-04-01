@@ -16,7 +16,7 @@ namespace Coup
         public static List<Player> players;
         private static List<PlayerIcon> icons;
         public static Random rng = new Random();
-        private Semaphore challengeSem;
+        private int responses;
         private int currentTurn = 0;
         private bool wasChallenged, wasBlocked;
         private Player challengingPlayer;
@@ -95,62 +95,118 @@ namespace Coup
             pictureBox2.Image = cards[1].GetImage(true);
             pictureBox3.Image = cards[2].GetImage(true);
         }
+        private String buttonName;
+        private int targettedPlayer;
         public void ButtonClicked(String buttonName, int player = -1)
         {
-            challengeSem = new Semaphore(0,5);   
+            this.buttonName = buttonName;
+            targettedPlayer = player;
+            responses = 0; 
             for(int i = 0; i < players.Count; i++)
             {
                 if (i == currentTurn) continue;
                 players[i].ActionTaken(buttonName, player,players[currentTurn].GetName(), player == -1 ? "" : players[player].GetName());
             }
-            challengeSem.WaitOne();
-            challengeSem.WaitOne();
-            challengeSem.WaitOne();
-            challengeSem.WaitOne();
-            challengeSem.WaitOne();
-
-
-            Console.WriteLine("All players have responded");
-
-
-
-            if(wasBlocked)
+        }
+        private bool block;
+        private void BlockAction()
+        {
+            responses = 0;
+            if (wasChallenged)
             {
-                for (int i = 0; i < players.Count; i++)
-                {
-                    if (i == currentTurn) continue;
-                    players[i].ActionBlocked(buttonName, player, players[currentTurn].GetName(), player == -1 ? "" : players[player].GetName());
-                }
-            }
-            else if(wasChallenged)
-            {
-                bool challengeResult = players[currentTurn].Challenge(buttonName, challengingPlayer.GetName());
-                if(challengeResult)
+                bool challengeResult = players[targettedPlayer].Challenge(buttonName, challengingPlayer.GetName());
+                if (challengeResult)
                 {
                     // Challenge not successful, challenging player loses a card
                     challengingPlayer.KillCard();
-                    DoAction(buttonName, currentTurn, player);
+
+                }
+                else
+                {
+                    DoAction(buttonName, currentTurn, targettedPlayer);
+                    // Tell all players challenge was successful
+                }
+            }
+            block = false;
+            currentTurn = (currentTurn + 1) % players.Count;
+            wasChallenged = false;
+            wasBlocked = false;
+            players[currentTurn].IsCurrentTurn();
+
+            foreach (Player p in players)
+            {
+                p.UpdateView();
+            }
+        }
+        private void Actions()
+        {
+            responses = 0;
+            if (wasBlocked)
+            {
+                wasChallenged = false;
+                block = true;
+                string name = "";
+                
+                switch (buttonName)
+                {
+                    case "assasainButton":
+                        name = "contessaButton";
+                        break;
+                    case "captainButton":
+                        name = "captainAmbassadorButton";
+                        break;
+                    case "foreignAidButton":
+                        name = "dukeButton";
+                        break;
+
+                }
+                for (int i = 0; i < players.Count; i++)
+                {
+                    if (i == targettedPlayer) continue;
+                    players[i].ActionBlocked(name, targettedPlayer, players[targettedPlayer].GetName(), players[currentTurn].GetName());
+
+                }
+               
+            }
+            else if (wasChallenged)
+            {
+                bool challengeResult = players[currentTurn].Challenge(buttonName, challengingPlayer.GetName());
+                if (challengeResult)
+                {
+                    // Challenge not successful, challenging player loses a card
+                    challengingPlayer.KillCard();
+                    DoAction(buttonName, currentTurn, targettedPlayer);
                 }
                 else
                 {
                     // Tell all players challenge was successful
                 }
+                currentTurn = (currentTurn + 1) % players.Count;
+                wasChallenged = false;
+                wasBlocked = false;
+                players[currentTurn].IsCurrentTurn();
+
+                foreach (Player p in players)
+                {
+                    p.UpdateView();
+                }
             }
             else
             {
-                DoAction(buttonName, currentTurn, player);
-                
+                DoAction(buttonName, currentTurn, targettedPlayer);
+                currentTurn = (currentTurn + 1) % players.Count;
+                wasChallenged = false;
+                wasBlocked = false;
+                players[currentTurn].IsCurrentTurn();
+
+                foreach (Player p in players)
+                {
+                    p.UpdateView();
+                }
+
             }
 
-            currentTurn = (currentTurn + 1) % players.Count;
-            wasChallenged = false;
-            players[currentTurn].IsCurrentTurn();
-
-            foreach(Player p in players)
-            {
-                p.UpdateView();
-            }
-
+            
         }
         private void DoAction(string buttonName, int currentTurn, int player)
         {
@@ -194,7 +250,9 @@ namespace Coup
         }
         public void NoActionTaken()
         {
-            challengeSem.Release();
+            responses++;
+            if (responses == players.Count - 1 && block) BlockAction();
+            else if (responses == players.Count - 1) Actions();
         }
 
         public static List<T> Shuffle<T>( List<T> list)
@@ -216,12 +274,16 @@ namespace Coup
             if (wasChallenged) p.AlreadyChallenged(players[currentTurn].GetName());
             else challengingPlayer = p;
             wasChallenged = true;
-            challengeSem.Release();
+            responses++;
+            if (responses == players.Count - 1 && block) BlockAction();
+            else if (responses == players.Count - 1) Actions();
         }
         public void Block(int playerNum)
         {
             wasBlocked = true;
-            challengeSem.Release();
+            responses++;
+            if (responses == players.Count - 1 && block) BlockAction();
+            else if (responses == players.Count - 1) Actions();
         }
     }
 }

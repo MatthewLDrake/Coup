@@ -39,7 +39,7 @@ namespace Coup
         public void SetUpGameView()
         {
             view = new PlayerGameView(playerNum, game);
-            view.Show();
+            //view.Show();
         }
         public bool Eliminated()
         {
@@ -227,6 +227,37 @@ namespace Coup
                     break;
             }
         }
+        public void ActionBlocked(String action, int player, String playerName, String targetName)
+        {
+            switch (action)
+            {
+                case "contessaButton":
+                    DialogResult result = MessageBox.Show(playerName + " blocked the assasain ", "Assasain Used", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.No)
+                        game.NoActionTaken();
+                    else
+                        game.Challenge(this);
+                    
+                    break;
+                case "captainAmbassadorButton":
+                    
+                    result = MessageBox.Show(playerName + " blocked the captain. Would you like to challenge the block?", "Captain Blocked", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.No)
+                        game.NoActionTaken();
+                    else
+                        game.Challenge(this);
+                    
+                    break;
+                case "dukeButton":
+                    result = MessageBox.Show(playerName + " blocked the foreign aid. Would you like to challenge their duke?", "Foreign Aid Blocked", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.No)
+                        game.NoActionTaken();
+                    else
+                        game.Challenge(this);
+
+                    break;
+            }
+        }
         public void PlayerSelected(int player)
         {
             game.ButtonClicked(selectedButton, player);
@@ -235,6 +266,7 @@ namespace Coup
         private void targettedPlayerClick(object sender, EventArgs e)
         {            
             view.ShowButtons();
+            view.Visible = true;
             currentTurn = false;
             tableLayoutPanel1.Visible = currentTurn;
 
