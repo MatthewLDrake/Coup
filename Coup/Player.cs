@@ -280,13 +280,32 @@ namespace Coup
         {
             MessageBox.Show(playerName + " was already challenged.", "Already Challenged", MessageBoxButtons.OK);
         }
+        private Card challengedCard;
         public bool Challenge(string buttonName, string playerName)
         {
             Challenge challenge = new Challenge(buttonName, playerName, cardOne, cardTwo);
             challenge.ShowDialog();
 
-
+            challengedCard = challenge.GetCard();
             return challenge.Result();
+        }
+
+        public Card GetChallengedCard()
+        {
+            if(challengedCard.Equals(cardOne))
+                cardOne = null;
+            else
+                cardTwo = null;
+            return challengedCard;
+        }
+        public void AddNewCard(Card newCard)
+        {
+            if (cardOne == null)
+                cardOne = newCard;
+            else
+                cardTwo = newCard;
+
+            UpdateCards();
         }
     }
 }

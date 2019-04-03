@@ -118,6 +118,11 @@ namespace Coup
                 if (challengeResult)
                 {
                     // Challenge not successful, challenging player loses a card
+                    Card returningCard = players[targettedPlayer].GetChallengedCard();
+                    cards.Add(returningCard);
+                    cards = Shuffle(cards);
+                    players[targettedPlayer].AddNewCard(cards[0]);
+                    cards.RemoveAt(0);
                     challengingPlayer.KillCard();
 
                 }
@@ -175,6 +180,11 @@ namespace Coup
                 {
                     // Challenge not successful, challenging player loses a card
                     challengingPlayer.KillCard();
+                    Card returningCard = players[currentTurn].GetChallengedCard();
+                    cards.Add(returningCard);
+                    cards = Shuffle(cards);
+                    players[currentTurn].AddNewCard(cards[0]);
+                    cards.RemoveAt(0);
                     DoAction(buttonName, currentTurn, targettedPlayer);
                 }
                 else

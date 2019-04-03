@@ -12,7 +12,7 @@ namespace Coup
 {
     public partial class Challenge : Form
     {
-        private Card cardOne, cardTwo;
+        private Card cardOne, cardTwo, selectedCard;
         private bool result;
         private string buttonName;
         public Challenge(string buttonName, string playerName, Card cardOne, Card cardTwo)
@@ -55,6 +55,10 @@ namespace Coup
         {
             return result;
         }
+        public Card GetCard()
+        {
+            return selectedCard;
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -80,6 +84,7 @@ namespace Coup
                     break;
             }
             if (!result) cardOne.Kill();
+            selectedCard = cardOne;
             Close();
         }
 
@@ -107,6 +112,7 @@ namespace Coup
                     break;
             }
             if (!result) cardTwo.Kill();
+            selectedCard = cardOne;
             Close();
         }
 
