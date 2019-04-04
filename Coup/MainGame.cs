@@ -24,7 +24,7 @@ namespace Coup
         {
             InitializeComponent();
             CreateDeck();
-            
+
         }
         private void CreateDeck()
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Coup
+namespace CoupServer
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace Coup
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ConnectToServer());
+            Application.Run(new Server());
         }
     }
 }

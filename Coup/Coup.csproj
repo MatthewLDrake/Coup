@@ -74,6 +74,9 @@
     <Compile Include="Challenge.Designer.cs">
       <DependentUpon>Challenge.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConnectToServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ContessaCard.cs" />
     <Compile Include="DukeCard.cs" />
     <Compile Include="KillCard.cs">
@@ -119,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Challenge.resx">
       <DependentUpon>Challenge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectToServer.resx">
+      <DependentUpon>ConnectToServer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KillCard.resx">
       <DependentUpon>KillCard.cs</DependentUpon>
