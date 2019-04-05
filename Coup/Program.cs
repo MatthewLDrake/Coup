@@ -16,7 +16,7 @@ namespace Coup
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ConnectToServer());
+            Application.Run(new MainGame());
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Coup
     public class Card
     {
         protected Bitmap image;
+        protected char letter;
         private static Bitmap cardFaceImage;
         private bool isDead;
         public Card()

@@ -39,7 +39,7 @@ namespace Coup
         public void SetUpGameView()
         {
             view = new PlayerGameView(playerNum, game);
-            //view.Show();
+            view.Show();
         }
         public bool Eliminated()
         {

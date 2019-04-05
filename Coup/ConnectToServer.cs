@@ -7,6 +7,7 @@ namespace Coup
     public class ConnectToServer : Form
     {
         private Socket client;
+        private int number;
         public ConnectToServer()
         {
             InitializeComponent();
@@ -20,13 +21,45 @@ namespace Coup
         }
         private void Connect(string ip, int port)
         {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(ip);
+            byte[] buffer = new byte[1024];
+
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); 
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
             client = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        }
 
+            client.Connect(remoteEP);
+
+            client.Receive(buffer);
+
+            string s = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+
+            MessageBox.Show(s);
+            number = int.Parse(s.Replace("Player ",""));
+            buffer = new byte[1024];
+            client.Receive(buffer);
+
+            s = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+
+            if (s.Equals("Cancel"))
+            {
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
+                client = null;
+            }
+            
+
+            Close();
+        }
+        public int GetNumber()
+        {
+            return number;
+        }
+        public Socket GetSocket()
+        {
+            return client;
+        }
 
 
         private Label label1;

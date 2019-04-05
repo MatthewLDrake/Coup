@@ -33,3 +33,4 @@ C:\Users\Matthew\source\repos\Coup\Coup\obj\Debug\Coup.CaptainDialog.resources
 C:\Users\Matthew\source\repos\Coup\Coup\obj\Debug\Coup.Challenge.resources
 C:\Users\Matthew\source\repos\Coup\Coup\obj\Debug\Coup.KillCard.resources
 C:\Users\Matthew\source\repos\Coup\Coup\obj\Debug\Coup.PlayerGameView.resources
+C:\Users\Matt\Documents\Coup\Coup\Coup\obj\Debug\Coup.ConnectToServer.resources

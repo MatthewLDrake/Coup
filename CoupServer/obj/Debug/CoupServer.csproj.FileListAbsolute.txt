@@ -8,3 +8,12 @@ C:\Users\Matthew\source\repos\Coup\CoupServer\obj\Debug\CoupServer.csproj.Genera
 C:\Users\Matthew\source\repos\Coup\CoupServer\obj\Debug\CoupServer.csproj.CoreCompileInputs.cache
 C:\Users\Matthew\source\repos\Coup\CoupServer\obj\Debug\CoupServer.exe
 C:\Users\Matthew\source\repos\Coup\CoupServer\obj\Debug\CoupServer.pdb
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\bin\Debug\CoupServer.exe.config
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\bin\Debug\CoupServer.exe
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\bin\Debug\CoupServer.pdb
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\obj\Debug\CoupServer.csprojResolveAssemblyReference.cache
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\obj\Debug\CoupServer.Properties.Resources.resources
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\obj\Debug\CoupServer.Server.resources
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\obj\Debug\CoupServer.csproj.GenerateResource.Cache
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\obj\Debug\CoupServer.exe
+C:\Users\Matt\Documents\Coup\Coup\CoupServer\obj\Debug\CoupServer.pdb

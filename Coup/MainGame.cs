@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,10 +21,25 @@ namespace Coup
         private int currentTurn = 0;
         private bool wasChallenged, wasBlocked;
         private Player challengingPlayer;
+        private Socket socket;
+        private int playerNum;
         public MainGame()
         {
             InitializeComponent();
+            Hide();
+            ConnectToServer serv = new ConnectToServer();
+            serv.ShowDialog();
+
+            socket = serv.GetSocket();
+
+            if (socket == null)
+                Close();
+
+            playerNum = serv.GetNumber();
+
             CreateDeck();
+
+            Show();
 
         }
         private void CreateDeck()
@@ -39,26 +55,82 @@ namespace Coup
                 playerIcon5,
                 playerIcon6
             };
-            cards = new List<Card>
+            if(playerNum == 1)
             {
-                new DukeCard(),
-                new DukeCard(),
-                new DukeCard(),
-                new AssasainCard(),
-                new AssasainCard(),
-                new AssasainCard(),
-                new ContessaCard(),
-                new ContessaCard(),
-                new ContessaCard(),
-                new AmbassadorCard(),
-                new AmbassadorCard(),
-                new AmbassadorCard(),
-                new CaptainCard(),
-                new CaptainCard(),
-                new CaptainCard()
-            };
+                cards = new List<Card>
+                {
+                    new DukeCard(),
+                    new DukeCard(),
+                    new DukeCard(),
+                    new AssasainCard(),
+                    new AssasainCard(),
+                    new AssasainCard(),
+                    new ContessaCard(),
+                    new ContessaCard(),
+                    new ContessaCard(),
+                    new AmbassadorCard(),
+                    new AmbassadorCard(),
+                    new AmbassadorCard(),
+                    new CaptainCard(),
+                    new CaptainCard(),
+                    new CaptainCard()
+                };
 
-            cards = Shuffle(cards);
+                cards = Shuffle(cards);
+
+                String str = "";
+                foreach(Card card in cards)
+                {
+                    Type type = card.GetType();
+                    if (card is DukeCard)                    
+                        str += "D";                    
+                    else if(card is AssasainCard)
+                        str += "A";
+                    else if (card is AmbassadorCard)
+                        str += "M";
+                    else if (card is CaptainCard)
+                        str += "C";
+                    else if (card is ContessaCard)
+                        str += "S";
+                }
+
+                socket.Send(Encoding.UTF8.GetBytes(str));
+            }
+            else
+            {
+                byte[] buff = new byte[1024];
+                socket.Receive(buff);
+
+                string s = System.Text.Encoding.UTF8.GetString(buff, 0, buff.Length);
+
+                cards = new List<Card>();
+
+                foreach(Char c in s)
+                {
+                    switch(c)
+                    {
+                        case 'D':
+                            cards.Add(new DukeCard());
+                            break;
+                        case 'A':
+                            cards.Add(new AssasainCard());
+                            break;
+                        case 'M':
+                            cards.Add(new AmbassadorCard());
+                            break;
+                        case 'C':
+                            cards.Add(new CaptainCard());
+                            break;
+                        case 'S':
+                            cards.Add(new ContessaCard());
+                            break;
+                    }
+                }
+
+
+            }
+
+            
             players.Add(new Player(0, this, "Player 1"));
             players.Add(new Player(1, this, "Player 2"));
             players.Add(new Player(2, this, "Player 3"));
@@ -77,7 +149,7 @@ namespace Coup
                 temp.AddCards(firstTwoCards);
                 cards.RemoveAt(0);
                 cards.RemoveAt(0);
-                temp.Show();
+                if(i == playerNum - 1)temp.Show();
 
                 icons[i].SetPlayerNum(i + 1);
                 icons[i].SetImageOne(temp.GetImageOne(true));
@@ -85,8 +157,8 @@ namespace Coup
                 icons[i].SetMoney(temp.GetCoins());
                 if (i == currentTurn) temp.IsCurrentTurn();
             }
-            foreach (Player p in players)
-                p.SetUpGameView();
+            players[playerNum - 1].SetUpGameView();
+            if (playerNum != 1) Hide();
             UpdateCards();
         }
         private void UpdateCards()
@@ -97,7 +169,7 @@ namespace Coup
         }
         private String buttonName;
         private int targettedPlayer;
-        public void ButtonClicked(String buttonName, int player = -1)
+        /*public void ButtonClicked(String buttonName, int player = -1)
         {
             this.buttonName = buttonName;
             targettedPlayer = player;
@@ -107,7 +179,16 @@ namespace Coup
                 if (i == currentTurn) continue;
                 players[i].ActionTaken(buttonName, player,players[currentTurn].GetName(), player == -1 ? "" : players[player].GetName());
             }
+        }*/
+
+        public void ButtonClicked(String buttonName, int player = -1)
+        {
+            byte[] buffer = new byte[64];
+            String valueToSend = buttonName + ';' + player;
+
+            socket.Send(buffer);
         }
+
         private bool block;
         private void BlockAction()
         {
@@ -137,11 +218,28 @@ namespace Coup
             wasChallenged = false;
             wasBlocked = false;
             players[currentTurn].IsCurrentTurn();
+            
 
             foreach (Player p in players)
             {
                 p.UpdateView();
             }
+
+            if (currentTurn != playerNum - 1) ReceiveNextAction();
+
+        }
+        private void ReceiveNextAction()
+        {
+            byte[] buffer = new byte[64];
+            socket.Receive(buffer);
+
+            string s = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+
+            string[] theParams = s.Split(';');
+
+            int player = int.Parse(theParams[1]);
+
+            players[playerNum - 1].ActionTaken(theParams[0], player, players[currentTurn].GetName(), player == -1 ? "" : players[player].GetName());
         }
         private void Actions()
         {
@@ -195,7 +293,7 @@ namespace Coup
                 wasChallenged = false;
                 wasBlocked = false;
                 players[currentTurn].IsCurrentTurn();
-
+                if (currentTurn != playerNum - 1) ReceiveNextAction();
                 foreach (Player p in players)
                 {
                     p.UpdateView();
@@ -208,7 +306,7 @@ namespace Coup
                 wasChallenged = false;
                 wasBlocked = false;
                 players[currentTurn].IsCurrentTurn();
-
+                if (currentTurn != playerNum - 1) ReceiveNextAction();
                 foreach (Player p in players)
                 {
                     p.UpdateView();
